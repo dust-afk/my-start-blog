@@ -1,0 +1,38 @@
+﻿<!doctype html>
+<html lang="zh-CN" class="">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Start Blog</title>
+    <script>
+      ;(() => {
+        const storageKey = 'theme-preference'
+
+        try {
+          const saved = localStorage.getItem(storageKey)
+          const prefersDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches ?? false
+          const shouldUseDark = saved === 'dark' || (saved === null && prefersDark)
+
+          document.documentElement.className = shouldUseDark ? 'dark' : ''
+        } catch {
+          document.documentElement.className = ''
+        }
+      })()
+    </script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/windicss@3.5.6/windi.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css" />
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+    <script>
+      window.addEventListener('DOMContentLoaded', () => {
+        if (window.hljs) {
+          window.hljs.highlightAll()
+        }
+      })
+    </script>
+  </head>
+  <body class="bg-[#eaf4fb] text-gray-900 dark:bg-gray-900 dark:text-gray-100">
+    <div id="app"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

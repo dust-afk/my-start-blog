@@ -1,0 +1,80 @@
+0 verbose cli D:\Program Files\nodejs\node.exe D:\Program Files\nodejs\node_modules\npm\bin\npm-cli.js
+1 info using npm@11.6.2
+2 info using node@v24.11.1
+3 silly config load:file:D:\Program Files\nodejs\node_modules\npm\npmrc
+4 silly config load:file:D:\Project\my-start-blog\.npmrc
+5 silly config load:file:C:\Users\17802\.npmrc
+6 silly config load:file:C:\Users\17802\AppData\Roaming\npm\etc\npmrc
+7 verbose title npm install dompurify@3.4.0 marked@16.4.1
+8 verbose argv "install" "dompurify@3.4.0" "marked@16.4.1" "--cache" ".npm-cache-run1" "--no-audit" "--no-fund"
+9 verbose logfile logs-max:10 dir:D:\Project\my-start-blog\.npm-cache-run1\_logs\2026-04-15T06_12_29_783Z-
+10 verbose logfile D:\Project\my-start-blog\.npm-cache-run1\_logs\2026-04-15T06_12_29_783Z-debug-0.log
+11 silly logfile done cleaning log files
+12 silly packumentCache heap:4496293888 maxSize:1124073472 maxEntrySize:562036736
+13 silly idealTree buildDeps
+14 silly fetch manifest dompurify@3.4.0
+15 silly packumentCache full:https://registry.npmmirror.com/dompurify cache-miss
+16 verbose shrinkwrap failed to load node_modules/.package-lock.json out of date, updated: node_modules
+17 http fetch GET 200 https://registry.npmmirror.com/dompurify 364ms (cache miss)
+18 silly fetch manifest marked@16.4.1
+19 silly packumentCache full:https://registry.npmmirror.com/marked cache-miss
+20 http fetch GET 200 https://registry.npmmirror.com/npm 590ms
+21 http fetch GET 200 https://registry.npmmirror.com/marked 388ms (cache miss)
+22 silly placeDep ROOT dompurify@ OK for: my-start-blog@0.1.0 want: 3.4.0
+23 silly placeDep ROOT marked@ OK for: my-start-blog@0.1.0 want: 16.4.1
+24 verbose type system
+25 verbose stack FetchError: Invalid response body while trying to fetch https://registry.npmmirror.com/dompurify: EPERM: operation not permitted, unlink 'D:\Project\my-start-blog\.npm-cache-run1\_cacache\tmp\5902eec6'
+25 verbose stack     at D:\Program Files\nodejs\node_modules\npm\node_modules\minipass-fetch\lib\body.js:170:15
+25 verbose stack     at async Response.json (D:\Program Files\nodejs\node_modules\npm\node_modules\minipass-fetch\lib\body.js:75:17)
+25 verbose stack     at async RegistryFetcher.packument (D:\Program Files\nodejs\node_modules\npm\node_modules\pacote\lib\registry.js:98:25)
+25 verbose stack     at async RegistryFetcher.manifest (D:\Program Files\nodejs\node_modules\npm\node_modules\pacote\lib\registry.js:128:23)
+25 verbose stack     at async #fetchManifest (D:\Program Files\nodejs\node_modules\npm\node_modules\@npmcli\arborist\lib\arborist\build-ideal-tree.js:1227:20)
+25 verbose stack     at async #nodeFromEdge (D:\Program Files\nodejs\node_modules\npm\node_modules\@npmcli\arborist\lib\arborist\build-ideal-tree.js:1065:19)
+25 verbose stack     at async #buildDepStep (D:\Program Files\nodejs\node_modules\npm\node_modules\@npmcli\arborist\lib\arborist\build-ideal-tree.js:929:11)
+25 verbose stack     at async Arborist.buildIdealTree (D:\Program Files\nodejs\node_modules\npm\node_modules\@npmcli\arborist\lib\arborist\build-ideal-tree.js:182:7)
+25 verbose stack     at async Promise.all (index 1)
+25 verbose stack     at async Arborist.reify (D:\Program Files\nodejs\node_modules\npm\node_modules\@npmcli\arborist\lib\arborist\reify.js:114:5)
+26 error code EPERM
+27 error syscall unlink
+28 error path D:\Project\my-start-blog\.npm-cache-run1\_cacache\tmp\5902eec6
+29 error errno EPERM
+30 error FetchError: Invalid response body while trying to fetch https://registry.npmmirror.com/dompurify: EPERM: operation not permitted, unlink 'D:\Project\my-start-blog\.npm-cache-run1\_cacache\tmp\5902eec6'
+30 error     at D:\Program Files\nodejs\node_modules\npm\node_modules\minipass-fetch\lib\body.js:170:15
+30 error     at async Response.json (D:\Program Files\nodejs\node_modules\npm\node_modules\minipass-fetch\lib\body.js:75:17)
+30 error     at async RegistryFetcher.packument (D:\Program Files\nodejs\node_modules\npm\node_modules\pacote\lib\registry.js:98:25)
+30 error     at async RegistryFetcher.manifest (D:\Program Files\nodejs\node_modules\npm\node_modules\pacote\lib\registry.js:128:23)
+30 error     at async #fetchManifest (D:\Program Files\nodejs\node_modules\npm\node_modules\@npmcli\arborist\lib\arborist\build-ideal-tree.js:1227:20)
+30 error     at async #nodeFromEdge (D:\Program Files\nodejs\node_modules\npm\node_modules\@npmcli\arborist\lib\arborist\build-ideal-tree.js:1065:19)
+30 error     at async #buildDepStep (D:\Program Files\nodejs\node_modules\npm\node_modules\@npmcli\arborist\lib\arborist\build-ideal-tree.js:929:11)
+30 error     at async Arborist.buildIdealTree (D:\Program Files\nodejs\node_modules\npm\node_modules\@npmcli\arborist\lib\arborist\build-ideal-tree.js:182:7)
+30 error     at async Promise.all (index 1)
+30 error     at async Arborist.reify (D:\Program Files\nodejs\node_modules\npm\node_modules\@npmcli\arborist\lib\arborist\reify.js:114:5) {
+30 error   code: 'EPERM',
+30 error   errno: 'EPERM',
+30 error   syscall: 'unlink',
+30 error   path: 'D:\\Project\\my-start-blog\\.npm-cache-run1\\_cacache\\tmp\\5902eec6',
+30 error   type: 'system',
+30 error   requiredBy: '.'
+30 error }
+31 error
+31 error The operation was rejected by your operating system.
+31 error It's possible that the file was already in use (by a text editor or antivirus),
+31 error or that you lack permissions to access it.
+31 error
+31 error If you believe this might be a permissions issue, please double-check the
+31 error permissions of the file and its containing directories, or try running
+31 error the command again as root/Administrator.
+32 silly unfinished npm timer reify 1776233552258
+33 silly unfinished npm timer reify:loadTrees 1776233552260
+34 verbose cwd D:\Project\my-start-blog
+35 verbose os Windows_NT 10.0.26200
+36 verbose node v24.11.1
+37 verbose npm  v11.6.2
+38 notice
+38 notice New minor version of npm available! 11.6.2 -> 11.12.1
+38 notice Changelog: https://github.com/npm/cli/releases/tag/v11.12.1
+38 notice To update run: npm install -g npm@11.12.1
+38 notice  { force: true, Symbol(proc-log.meta): true }
+39 verbose exit 1
+40 verbose code 1
+41 error A complete log of this run can be found in: D:\Project\my-start-blog\.npm-cache-run1\_logs\2026-04-15T06_12_29_783Z-debug-0.log
