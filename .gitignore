@@ -1,0 +1,63 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+dist-ssr/
+build/
+*.tsbuildinfo
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Test / coverage
+coverage/
+.nyc_output/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Cache directories
+.cache/
+.temp/
+tmp/
+temp/
+.vite/
+.vitest/
+.eslintcache
+
+# IDE / Editor
+.idea/
+*.iml
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/launch.json
+!.vscode/tasks.json
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Local archives / backups
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.bak
+*.tmp
+
+# Prompt docs (root)
+/AI-SETUP.md
+/[0-9][0-9]-*.md
+/*提示词*.md
