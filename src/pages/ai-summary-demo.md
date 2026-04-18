@@ -1,25 +1,40 @@
 ﻿---
-title: AI Summary Demo
+title: AI 摘要接入复盘
 date: 2026-04-14
-tags:
-  - AI
-  - Summary
-  - Frontend
+updated: 2026-04-18
+type: note
+tags: [AI, Summary, Product]
+pattern: checklist
+summary:
+  - 摘要应由用户主动触发，而不是默认强插。
+  - 同文章摘要需要缓存，避免重复生成。
+  - 输出必须经过 HTML 清洗再渲染。
+  - 出错时要给出可重试入口。
+yuque: https://www.yuque.com/dust-notes/ai/summary-integration
+github: https://github.com/yourname/my-start-blog/tree/main/src/components
+related_articles: [hello-codex, react-ecosystem-redux-hooks-react18-ssr]
+related_projects: [my-start-blog]
+excerpt: 一篇短复盘，记录 AI 摘要能力在博客中的接入取舍。
 ---
 
-# AI Summary Demo
+## 关键概念
+AI 摘要是“辅助阅读”能力，不该替代正文。触发时机应让用户可控。
 
-本文用于演示“AI 摘要”能力在博客页中的接入方式，核心关注点有三个：
+```ts
+if (!userClicked) return
+summary = await fetchSummary(postId)
+```
 
-- 摘要请求时机（用户主动触发）
-- 摘要结果缓存（避免重复调用）
-- 交互反馈（加载态、错误态、重试）
+## 最小可运行代码
+```ts
+const cache = new Map<string, string>()
 
-## Interaction Notes
+export async function getSummary(postId: string) {
+  if (cache.has(postId)) return cache.get(postId) as string
+  const result = await requestSummary(postId)
+  cache.set(postId, result)
+  return result
+}
+```
 
-建议在产品层做两层防护：
-
-1. 对同一篇文章设置缓存键，减少重复请求
-2. 对输出内容做 HTML 清洗，避免注入风险
-
-> Demo 文章主要用于联调，不代表最终产品文案。
+这个实现足够小，但已经覆盖了缓存和重复请求问题。

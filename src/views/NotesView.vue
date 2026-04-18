@@ -1,21 +1,26 @@
 ﻿<template>
   <section class="archive-page">
     <header class="archive-head">
-      <h1><span aria-hidden="true">🧵</span> Blog</h1>
+      <h1><span aria-hidden="true">📝</span> Notes</h1>
       <p>
-        面向读者的深度文章：讲清背景、方案与可复用结论。
-        <RouterLink to="/projects">查看项目清单</RouterLink>
+        个人速查手册：结论优先、最小示例、可快速复用。
+        <RouterLink to="/notes/topics">View all posts.</RouterLink>
       </p>
     </header>
 
     <label class="search-wrap">
       <span aria-hidden="true">🔍</span>
-      <input v-model="query" type="search" :placeholder="`Search ${blogPosts.length} posts...`" />
+      <input v-model="query" type="search" :placeholder="`Search ${notePosts.length} notes...`" />
     </label>
 
+    <div v-if="activeTag !== 'all'" class="active-topic">
+      <span>Topic: {{ activeTag }}</span>
+      <button type="button" class="clear-topic-btn" @click="activeTag = 'all'">Clear</button>
+    </div>
+
     <section class="archive-body" aria-live="polite">
-      <p v-if="loading" class="empty-hint">正在加载文章...</p>
-      <p v-else-if="yearGroups.length === 0" class="empty-hint">没有匹配结果。</p>
+      <p v-if="loading" class="empty-hint">正在加载笔记...</p>
+      <p v-else-if="yearGroups.length === 0" class="empty-hint">当前还没有 Notes，先去写一篇吧。</p>
 
       <div v-for="group in yearGroups" :key="group.year" class="year-group">
         <div class="year-head">
@@ -28,13 +33,9 @@
             <time :datetime="post.date" class="post-date">{{ formatDate(post.date) }}</time>
             <div class="post-main">
               <RouterLink :to="`/article/${post.slug}`" class="post-link">{{ post.title }}</RouterLink>
-              <p class="post-excerpt">{{ post.excerpt }}</p>
               <div class="post-meta">
-                <span class="updated-at">更新于 {{ formatDate(post.updated || post.date) }}</span>
-                <span class="read-time">阅读约 {{ post.readingMinutes }} 分钟</span>
-                <span v-for="tag in post.tags.slice(0, 3)" :key="`${post.slug}-${tag}`" class="tag-pill">
-                  {{ tag }}
-                </span>
+                <span v-if="post.updated" class="updated-at">更新于 {{ formatDate(post.updated) }}</span>
+                <span v-if="post.pattern" class="tag-pill tag-pill-pattern">{{ post.pattern }}</span>
               </div>
             </div>
           </li>
@@ -45,7 +46,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { loadAllPosts, type PostMeta } from '@/utils/markdown'
 
 type YearGroup = {
@@ -55,25 +57,38 @@ type YearGroup = {
 
 const loading = ref(true)
 const query = ref('')
+const activeTag = ref('all')
 const posts = ref<PostMeta[]>([])
+const route = useRoute()
+const router = useRouter()
 
-const blogPosts = computed(() => posts.value.filter((post) => post.type === 'blog'))
+const notePosts = computed(() => posts.value.filter((post) => post.type === 'note'))
+const availableTags = computed(() => {
+  const map = new Map<string, number>()
+
+  notePosts.value.forEach((post) => {
+    post.tags.forEach((tag) => {
+      map.set(tag, (map.get(tag) ?? 0) + 1)
+    })
+  })
+
+  return Array.from(map.entries())
+    .map(([name, count]) => ({ name, count }))
+    .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name))
+})
 
 const filteredPosts = computed(() => {
-  const keyword = query.value.normalize('NFKC').trim().toLowerCase()
-  if (keyword.length === 0) {
-    return blogPosts.value
+  const source =
+    activeTag.value === 'all' ? notePosts.value : notePosts.value.filter((post) => post.tags.includes(activeTag.value))
+
+  const keyword = query.value.trim().toLowerCase()
+  if (!keyword) {
+    return source
   }
 
-  const terms = keyword.split(/\s+/).filter(Boolean)
-
-  return blogPosts.value.filter((post) => {
-    const haystack = [post.title, post.tags.join(' '), post.slug]
-      .join(' ')
-      .normalize('NFKC')
-      .toLowerCase()
-
-    return terms.every((term) => haystack.includes(term))
+  return source.filter((post) => {
+    const haystack = [post.title, post.excerpt, post.tags.join(' ')].join(' ').toLowerCase()
+    return haystack.includes(keyword)
   })
 })
 
@@ -111,8 +126,57 @@ const formatPostCount = (count: number): string => {
   return `${count} post${count > 1 ? 's' : ''}`
 }
 
+const readTagFromRoute = (): string => {
+  const rawTag = route.query.tag
+  return typeof rawTag === 'string' && rawTag.trim() ? rawTag.trim() : 'all'
+}
+
+const syncTagToRoute = async (tag: string): Promise<void> => {
+  const currentTag = typeof route.query.tag === 'string' ? route.query.tag : undefined
+  const normalized = tag === 'all' ? undefined : tag
+
+  if (currentTag === normalized) {
+    return
+  }
+
+  const nextQuery = { ...route.query } as Record<string, string | string[] | undefined>
+  if (normalized) {
+    nextQuery.tag = normalized
+  } else {
+    delete nextQuery.tag
+  }
+
+  await router.replace({ query: nextQuery })
+}
+
+watch(
+  () => route.query.tag,
+  () => {
+    const routeTag = readTagFromRoute()
+    if (activeTag.value !== routeTag) {
+      activeTag.value = routeTag
+    }
+  }
+)
+
+watch(activeTag, (tag) => {
+  void syncTagToRoute(tag)
+})
+
+watch(availableTags, (groups) => {
+  if (activeTag.value === 'all') {
+    return
+  }
+
+  const hasTag = groups.some((group) => group.name === activeTag.value)
+  if (!hasTag) {
+    activeTag.value = 'all'
+  }
+})
+
 onMounted(async () => {
   posts.value = await loadAllPosts()
+  activeTag.value = readTagFromRoute()
   loading.value = false
 })
 </script>
@@ -179,6 +243,30 @@ onMounted(async () => {
 
 .search-wrap input:focus {
   outline: none;
+}
+
+.active-topic {
+  margin-top: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--panel-soft);
+  padding: 6px 12px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.clear-topic-btn {
+  border: none;
+  background: transparent;
+  color: var(--link);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0;
 }
 
 .archive-body {
@@ -252,13 +340,6 @@ onMounted(async () => {
   min-width: 0;
 }
 
-.post-excerpt {
-  margin: 8px 0 0;
-  color: var(--muted);
-  font-size: 14px;
-  line-height: 1.5;
-}
-
 .post-meta {
   margin-top: 8px;
   display: flex;
@@ -268,11 +349,6 @@ onMounted(async () => {
 }
 
 .updated-at {
-  color: var(--muted);
-  font-size: 13px;
-}
-
-.read-time {
   color: var(--muted);
   font-size: 13px;
 }
@@ -288,6 +364,12 @@ onMounted(async () => {
   align-items: center;
   font-size: 12px;
   font-weight: 600;
+}
+
+.tag-pill-pattern {
+  border-color: var(--line);
+  background: var(--panel);
+  color: var(--muted);
 }
 
 @media (max-width: 960px) {
@@ -306,9 +388,7 @@ onMounted(async () => {
     font-size: 14px;
   }
 
-  .post-excerpt,
-  .updated-at,
-  .read-time {
+  .updated-at {
     font-size: 12px;
   }
 

@@ -1,16 +1,27 @@
 ﻿<template>
-  <main class="mx-auto max-w-4xl px-4 py-10 sm:px-8">
-    <h1 class="text-3xl font-normal">页面未找到</h1>
-    <p class="mt-2">404：你访问的页面不存在。</p>
-
-    <nav class="mt-4 border-t border-blue-200 pt-4">
-      <div class="flex flex-wrap gap-4">
-        <RouterLink to="/">回首页</RouterLink>
-        <RouterLink to="/blog">去 Blog</RouterLink>
-        <RouterLink to="/resume">去 Resume</RouterLink>
-      </div>
-    </nav>
-  </main>
+  <section class="not-found">
+    <h1>404</h1>
+    <p>你访问的页面不存在。</p>
+    <RouterLink to="/blog">返回 Blog</RouterLink>
+  </section>
 </template>
 
 <script setup lang="ts"></script>
+
+<style scoped>
+.not-found h1 {
+  margin: 0;
+  font-size: 52px;
+}
+
+.not-found p {
+  margin: 12px 0;
+  color: var(--muted);
+  font-size: 18px;
+}
+
+.not-found a {
+  color: var(--link);
+  font-size: 18px;
+}
+</style>

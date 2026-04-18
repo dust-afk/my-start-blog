@@ -1,32 +1,47 @@
+﻿---
+title: CSS 盒模型速查
+date: 2025-10-15
+updated: 2026-04-18
+type: blog
+tags: [CSS, Box Model, Frontend]
+summary:
+  - `content-box` 下，`width/height` 只计算内容区。
+  - `border-box` 更适合工程化布局，尺寸更可控。
+  - 统一设置 `box-sizing` 能减少布局偏移问题。
+  - 组件库开发建议从全局重置开始。
+yuque: https://www.yuque.com/dust-notes/css/box-model
+github: https://github.com/yourname/markdown-snippets/tree/main/css-box-model
+related_articles: [css-BFC, hello-codex]
+related_projects: [markdown-snippets]
+excerpt: 5 分钟掌握 CSS 盒模型的计算规则和工程实践。
 ---
-title: 盒子模型
-date: 2026-04-15
-tags:
-  - CSS
-  - Box Model
-  - Frontend
----
 
-## 盒子模型
+## 关键概念
+`content-box` 是浏览器默认模式：元素实际占位 = `content + padding + border + margin`。
 
-### 标准盒子模型（浏览器默认盒子模型）
+`border-box` 模式下，`width/height` 包含了 `padding + border`，更容易控制卡片、表单等组件宽度。
 
-盒子的总宽度 = width + padding + border + margin  
-盒子总高度 = height + padding + border + margin
+```css
+/* 工程默认推荐 */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+```
 
-总结：`width/height` 都只是内容高度（content），不包含 `padding` 和 `border`。
+## 最小可运行代码
+```html
+<div class="card">hello box model</div>
+```
 
-### IE 怪异盒子模型
+```css
+.card {
+  width: 240px;
+  padding: 16px;
+  border: 2px solid #1f2937;
+  background: #f8fafc;
+}
+```
 
-盒子总宽度 = width + margin  
-盒子总高度 = height + margin
-
-总结：`width/height` 包含 `padding` 和 `border` 的值。
-
-### box-sizing
-
-`box-sizing: content-box | border-box | inherit`
-
-- `content-box`：默认值，与标准盒子模型表现一致。
-- `border-box`：与怪异盒子模型表现一致。
-- `inherit`：`box-sizing` 属性值从父元素继承。
+运行后你可以快速验证：在 `border-box` 下，卡片始终保持 240px 总宽度。
