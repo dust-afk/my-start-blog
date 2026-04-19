@@ -61,3 +61,7 @@ $RECYCLE.BIN/
 /AI-SETUP.md
 /[0-9][0-9]-*.md
 /*提示词*.md
+*.tmp
+.npm-cache*
+node_modules/
+.deps-tmp/
