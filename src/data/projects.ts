@@ -21,7 +21,7 @@ export const projectCards: ProjectCard[] = [
     name: 'AI心理健康助手',
     stars: 203,
     description: 'AI驱动的心理健康支持平台，提供情绪分析、心理测评与个性化建议功能。',
-    sourceUrl: 'https://github.com/dust-afk/Serene-ai-project'
+    sourceUrl: 'https://github.com/dust-afk/ai-vue'
   },
   {
     year: 2025,
