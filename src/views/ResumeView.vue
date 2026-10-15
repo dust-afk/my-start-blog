@@ -80,7 +80,7 @@
         </li>
         <li>
           <strong>GitHub：</strong>
-          <a href="https://github.com/dust/afk" target="_blank" rel="noreferrer">github.com/dust/afk</a>
+          <a href="https://github.com/dust-afk" target="_blank" rel="noreferrer">github.com/dust-afk</a>
         </li>
         <li>
           <strong>Phone：18784859692</strong>
